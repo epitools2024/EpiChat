@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as URLLauncher;
 import 'package:EpiChat/lib.dart' as lib;
@@ -28,14 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  _lauchURL(String url) async {
-    url = Uri.encodeFull(url);
-    if (await URLLauncher.canLaunch(url))
-      await URLLauncher.launch(url);
-    else
-      throw 'Could not launch $url';
-  }
-
   _checkMail(String mail) {
     if (mail.isEmpty) {
       return "Ne doit pas être vide !";
@@ -63,27 +54,31 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  _submitForm(BuildContext context) async {
+  Future<void> _lauchURL(String url) async {
+    url = Uri.encodeFull(url);
+    if (await URLLauncher.canLaunch(url))
+      await URLLauncher.launch(url);
+    else
+      throw 'Could not launch $url';
+  }
+
+  void _submitForm(BuildContext context) async {
     final form = _globalForm.currentState;
     var response = await http
         .get(Uri.encodeFull('${_autologin.text}/user/${_email.text}/'));
 
     if (!form.validate() || response.statusCode != 200) {
       _autoValidate = true;
-      _showDialog(context,
-          "Il semble que soit votre email n'est pas valide soit que vous l'avez mal écrit !");
+      lib.showDialog(context, _scaffoldKey,
+          "Il semble que soit votre email n'est pas valide soit que vous l'avez mal écrit !\nPensez à revoir votre connexion aussi !");
     } else {
       lib.setStringValue('autologin', _autologin.text);
       lib.setStringValue('email', _email.text);
       lib.setBoolValue('isEpitech', true);
-      _showDialog(context, "Super 💙! Tout a été enregistré !");
+      lib.showDialog(
+          context, _scaffoldKey, "Super 💙! Tout a été enregistré !");
       Navigator.of(context).popAndPushNamed("home");
     }
-  }
-
-  _showDialog(BuildContext context, String msg) {
-    final snackBar = SnackBar(content: Text(msg));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   @override

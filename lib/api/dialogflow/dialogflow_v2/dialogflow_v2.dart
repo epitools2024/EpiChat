@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:EpiChat/api/dialogflow/v2/auth_google.dart';
+import 'package:EpiChat/api/dialogflow/dialogflow_v2/auth_google.dart';
 import 'package:meta/meta.dart';
 
 class Intent {
@@ -71,41 +71,23 @@ class AIResponse {
         : null;
   }
 
-  String get responseId {
-    return _responseId;
-  }
+  String getMessage() => _queryResult.fulfillmentText;
 
-  String getMessage() {
-    return _queryResult.fulfillmentText;
-  }
+  String getWebhookStatusMessage() => _webhookStatus.message;
 
-  String getWebhookStatusMessage() {
-    return _webhookStatus.message;
-  }
+  List<dynamic> getListMessage() => _queryResult.fulfillmentMessages;
 
-  List<dynamic> getListMessage() {
-    return _queryResult.fulfillmentMessages;
-  }
+  num get intentDetectionConfidence => _intentDetectionConfidence;
 
-  num get intentDetectionConfidence {
-    return _intentDetectionConfidence;
-  }
+  String get responseId => _responseId;
 
-  String get languageCode {
-    return _languageCode;
-  }
+  String get languageCode => _languageCode;
 
-  DiagnosticInfo get diagnosticInfo {
-    return _diagnosticInfo;
-  }
+  DiagnosticInfo get diagnosticInfo => _diagnosticInfo;
 
-  WebhookStatus get webhookStatus {
-    return _webhookStatus;
-  }
+  WebhookStatus get webhookStatus => _webhookStatus;
 
-  QueryResult get queryResult {
-    return _queryResult;
-  }
+  QueryResult get queryResult => _queryResult;
 }
 
 class Dialogflow {
@@ -120,21 +102,18 @@ class Dialogflow {
       this.payload = "",
       this.resetContexts = false});
 
-  String _getUrl() {
-    return "https://dialogflow.googleapis.com/v2/projects/${authGoogle.getProjectId}/agent/sessions/${authGoogle.getSessionId}:detectIntent";
-  }
+  String _getUrl() =>
+      "https://dialogflow.googleapis.com/v2/projects/${authGoogle.getProjectId}/agent/sessions/${authGoogle.getSessionId}:detectIntent";
 
   Future<AIResponse> detectIntent(String query) async {
     String queryParams = '{"resetContexts": ${this.resetContexts} }';
+    String body =
+        '{"queryInput":{"text":{"text":"$query","language_code":"$language"}}, "queryParams": $queryParams}';
 
     if (payload.isNotEmpty) {
       queryParams =
           '{"resetContexts": ${this.resetContexts}, "payload": $payload}';
     }
-
-    String body =
-        '{"queryInput":{"text":{"text":"$query","language_code":"$language"}}, "queryParams": $queryParams}';
-
     var response = await authGoogle.post(_getUrl(),
         headers: {
           HttpHeaders.authorizationHeader: "Bearer ${authGoogle.getToken}"

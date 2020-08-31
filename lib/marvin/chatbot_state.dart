@@ -30,6 +30,9 @@ class NaoAppBar extends StatelessWidget {
             ),
           ),
         ),
+        Expanded(
+          child: SizedBox(),
+        ),
         Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: MediaQuery.of(context).size.width * (0.19)),
@@ -44,6 +47,9 @@ class NaoAppBar extends StatelessWidget {
                 ),
               ),
             )),
+        Expanded(
+          child: SizedBox(),
+        ),
       ],
     ));
   }
@@ -62,7 +68,7 @@ class _ChatBotState extends State<ChatBot> {
     Sms('bot', "Je te suis 👽"),
   ];
 
-  void agentResponse(query) async {
+  Future<void> agentResponse(query) async {
     _controller.clear();
     AuthGoogle authGoogle = await AuthGoogle(
             fileJson: "assets/json/naomarvinjr-kf9q-57c489811c16.json")
@@ -79,7 +85,7 @@ class _ChatBotState extends State<ChatBot> {
     });
   }
 
-  _sendingTexto(String texto) async {
+  Future<void> _sendingTexto(String texto) async {
     Sms usrSms = Sms('user', texto);
 
     setState(() {

@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:EpiChat/widget/custom_widget.dart';
-import 'package:EpiChat/other_view/login_screen.dart';
 
 class Questions extends StatefulWidget {
   Questions({Key key}) : super(key: key);

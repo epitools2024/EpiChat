@@ -49,8 +49,7 @@ class AuthGoogle {
     return _credentials.accessToken.data;
   }
 
-  Future<Response> post(url,
-      {Map<String, String> headers, body, Encoding encoding}) async {
+  Future<Response> post(url, {Map<String, String> headers, body}) async {
     if (!hasExpired) {
       return await http.post(url, headers: headers, body: body);
     } else {

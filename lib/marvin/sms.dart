@@ -63,7 +63,6 @@ class Sms extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return (this.from == 'user' ? userSms(context) : botSms(context));
-  }
+  Widget build(BuildContext context) =>
+      (this.from == 'user' ? userSms(context) : botSms(context));
 }
