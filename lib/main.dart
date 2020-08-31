@@ -12,7 +12,7 @@ import 'package:EpiChat/news/news_core.dart';
 import 'package:EpiChat/marvin/chatbot_state.dart';
 import 'package:EpiChat/other_view/splash_screen.dart';
 import 'package:EpiChat/widget/custom_widget.dart';
-import 'package:EpiChat/other_view/profile_infos.dart';
+import 'package:EpiChat/profile/profile_infos.dart';
 import 'package:EpiChat/other_view/epitech_or_not_screen.dart';
 import 'package:EpiChat/other_view/login_screen.dart';
 

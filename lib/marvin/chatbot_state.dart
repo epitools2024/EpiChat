@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dialogflow/dialogflow_v2.dart';
+import 'package:EpiChat/api/dialogflow/dialogflow_v2.dart';
 import 'package:EpiChat/widget/custom_widget.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:EpiChat/marvin/sms.dart';
@@ -51,7 +51,7 @@ class NaoAppBar extends StatelessWidget {
 
 class ChatBot extends StatefulWidget {
   ChatBot({Key key, this.isEpitech}) : super(key: key);
-  bool isEpitech;
+  final bool isEpitech;
   @override
   _ChatBotState createState() => _ChatBotState();
 }
