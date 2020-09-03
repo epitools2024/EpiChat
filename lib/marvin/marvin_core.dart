@@ -32,10 +32,10 @@ class _MarvinJrState extends State<MarvinJr> {
                         'Bonjour à toi.\nJe suis Nao Marvin Jr.\n',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * (0.029),
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Rubik'),
+                          fontSize:
+                              MediaQuery.of(context).size.height * (0.029),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     SizedBox(

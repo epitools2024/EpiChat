@@ -1,4 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+class WebViewLoad extends StatefulWidget {
+  final String title;
+  final String url;
+  WebViewLoad({@required this.url, this.title});
+  WebViewLoadUI createState() => WebViewLoadUI();
+}
+
+class WebViewLoadUI extends State<WebViewLoad> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child: CustomAppBar(
+              compenants: [
+                Expanded(
+                  child: SizedBox(),
+                ),
+                Center(
+                  child: Text(
+                    "${widget.title}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 21,
+                      color: Theme.of(context).accentColor,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(),
+                ),
+              ],
+            )),
+        body: WebView(
+          initialUrl: widget.url,
+          javascriptMode: JavascriptMode.unrestricted,
+        ));
+  }
+}
 
 class CustomCenteredRow extends StatelessWidget {
   final List<Widget> children;
@@ -65,5 +107,50 @@ class CustomAppBar extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomOptionButton extends StatelessWidget {
+  final Function func;
+  final String label;
+  final IconData ico;
+  CustomOptionButton({this.label, this.func, this.ico});
+
+  @override
+  Widget build(BuildContext context) {
+    return (GestureDetector(
+        onTap: func,
+        child: Container(
+          height: MediaQuery.of(context).size.height * (0.06),
+          width: MediaQuery.of(context).size.width * (0.8),
+          child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 1,
+              ),
+              child: Row(children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * (0.03),
+                ),
+                Icon(this.ico),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * (0.05),
+                ),
+                Text(this.label,
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Theme.of(context).accentColor,
+                    ))
+              ])),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 5,
+                  spreadRadius: 0.01,
+                  color: Colors.grey[350],
+                )
+              ]),
+        )));
   }
 }

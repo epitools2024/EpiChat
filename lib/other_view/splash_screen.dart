@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:EpiChat/widget/custom_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:EpiChat/main.dart';
-import 'package:EpiChat/lib.dart';
+import 'package:EpiChat/lib.dart' as lib;
 import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
@@ -16,19 +16,21 @@ class SplashScreenState extends State<SplashScreen>
   var _visible = true;
   bool enableOnBoard = true;
   int nbrTimeOpened;
-  var isEpitech;
-
+  var isEpitech, mail, autologin;
   AnimationController animationController;
   Animation<double> animation;
 
   startTime() async {
     var _duration = new Duration(milliseconds: 2300);
+    isEpitech = await lib.getBoolFromSharedPref('isEpitech');
+    mail = await lib.getStringFromSharedPref('email');
+    autologin = await lib.getStringFromSharedPref('autologin');
     return new Timer(_duration, () => navigationPage());
   }
 
   void navigationPage() {
-    if (nbrTimeOpened == 0)
-      Navigator.pushReplacementNamed(context, 'onBoard');
+    if (isEpitech == true && mail != null && autologin != null)
+      Navigator.pushReplacementNamed(context, 'home');
     else
       Navigator.of(context).pushNamedAndRemoveUntil(
           'questions', (Route<dynamic> route) => false);

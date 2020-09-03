@@ -72,9 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
       lib.showDialog(context, _scaffoldKey,
           "Il semble que soit votre email n'est pas valide soit que vous l'avez mal écrit !\nPensez à revoir votre connexion aussi !");
     } else {
-      lib.setStringValue('autologin', _autologin.text);
-      lib.setStringValue('email', _email.text);
-      lib.setBoolValue('isEpitech', true);
+      await lib.setStringValue('email', _email.text);
+      await lib.setStringValue('autologin', _autologin.text);
+      await lib.setBoolValue('isEpitech', true);
       lib.showDialog(
           context, _scaffoldKey, "Super 💙! Tout a été enregistré !");
       Navigator.of(context).popAndPushNamed("home");

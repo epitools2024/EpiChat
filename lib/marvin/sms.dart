@@ -20,10 +20,7 @@ class Sms extends StatelessWidget {
                 maxWidth: MediaQuery.of(context).size.width * (0.5),
               ),
               child: Text(this.message,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Rubik',
-                      fontSize: _fontSize)),
+                  style: TextStyle(color: Colors.white, fontSize: _fontSize)),
             ),
           )),
     ]));
@@ -51,10 +48,7 @@ class Sms extends StatelessWidget {
                 ),
                 child: Text(
                   this.message,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Rubik',
-                      fontSize: _fontSize),
+                  style: TextStyle(color: Colors.black, fontSize: _fontSize),
                 ),
               ),
             )),

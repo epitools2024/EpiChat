@@ -42,6 +42,7 @@ dependencies:
   http: ^0.12.2
   googleapis: ^0.55.0
   googleapis_auth: ^0.2.12
+  webview_flutter: ^0.3.19+6
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -98,7 +99,7 @@ flutter:
     - family: Rubik
       fonts:
         - asset: assets/font/Rubik/Rubik-Regular.ttf
-        - asset: assets/font/Rubik/Rubik-BoldItalic.ttf
+        - asset: assets/font/Rubik/Rubik-Italic.ttf
           style: italic
         # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

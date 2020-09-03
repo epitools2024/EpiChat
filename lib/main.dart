@@ -15,8 +15,6 @@ import 'package:EpiChat/profile/profile_infos.dart';
 import 'package:EpiChat/other_view/epitech_or_not_screen.dart';
 import 'package:EpiChat/other_view/login_screen.dart';
 
-Color pBlueColor = Color(0xFF4573F8);
-
 void main() {
   runApp(MyApp());
 }
@@ -32,7 +30,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "Roboto",
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        accentColor: pBlueColor,
+        accentColor: Color(0xFF4573F8),
       ),
       home: SplashScreen(),
       routes: {
@@ -46,6 +44,7 @@ class MyApp extends StatelessWidget {
         'chatbot': (context) => ChatBot(),
         'questions': (context) => Questions(),
         'login': (context) => LoginScreen(),
+        'splashscreen': (context) => SplashScreen(),
       },
     );
   }
@@ -91,29 +90,29 @@ class _MyHomePageState extends State<MyHomePage> {
         ? List<GButton>.of([
             GButton(
               icon: CustomIcon.chat,
-              iconColor: pBlueColor,
+              iconColor: Color(0xFF4573F8),
               text: 'Texto',
             ),
             GButton(
               icon: LineIcons.lightbulb_o,
-              iconColor: pBlueColor,
+              iconColor: Color(0xFF4573F8),
               text: 'News',
             ),
             GButton(
               icon: CustomIcon.plan,
-              iconColor: pBlueColor,
+              iconColor: Color(0xFF4573F8),
               text: 'Planning',
             ),
             GButton(
               icon: FontAwesomeIcons.robot,
-              iconColor: pBlueColor,
+              iconColor: Color(0xFF4573F8),
               text: 'M. Jr',
             ),
           ])
         : List<GButton>.of([
             GButton(
               icon: FontAwesomeIcons.robot,
-              iconColor: pBlueColor,
+              iconColor: Color(0xFF4573F8),
               text: 'Marvin Jr',
             ),
           ]);
@@ -144,15 +143,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
-                          onPressed: () => MaterialPageRoute(
-                              builder: (context) => ProfileInfos(
-                                    email: email,
-                                    autologin: autologin,
-                                  )),
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed('profil'),
                           icon: Icon(
                             LineIcons.user,
                             size: MediaQuery.of(context).size.height * (0.05),
-                            color: pBlueColor,
+                            color: Color(0xFF4573F8),
                           ),
                         ),
                       ),
@@ -172,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: widget.isEpitech
           ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(

@@ -1,36 +1,39 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:EpiChat/widget/custom_widget.dart';
-import 'package:EpiChat/api/intra.dart';
+import 'package:EpiChat/lib.dart' as lib;
+import 'package:EpiChat/api/intra.dart' as intra;
 
 class ProfileInfos extends StatefulWidget {
-  ProfileInfos({Key key, this.email, this.autologin}) : super(key: key);
-  String email;
-  String autologin;
+  ProfileInfos({Key key}) : super(key: key);
   @override
   _ProfileInfosState createState() => _ProfileInfosState();
 }
 
 class _ProfileInfosState extends State<ProfileInfos> {
-  var gpa;
-  var annee;
-  var credit;
+  double gpa = 0.0;
+  int year = 1;
+  int credit;
+  String epitechMail, autologin;
+  GlobalKey _key;
 
-  _initInfos() async {
-    Intra req = Intra(epitechMail: widget.email, autologin: widget.autologin);
-    req.init();
-
+  void _initUserInfos() async {
+    var login = await lib.getStringFromSharedPref('autologin');
+    var mail = await lib.getStringFromSharedPref('email');
+    print('Debug initUserInfos() (in profile_infos.dart):\n$mail\n$login');
     setState(() {
-      gpa = req.getInfosAbout('gpa');
-      annee = req.getInfosAbout('scolaryear');
-      credit = req.getInfosAbout('credit');
+      epitechMail = mail;
+      autologin = login;
     });
   }
 
-  Widget _profileWidget(String urlToPP, String name) {
+  @override
+  void initState() {
+    super.initState();
+    _initUserInfos();
+  }
+
+  Widget _profileWidget(String urlToPP, String name, String infos) {
     return (Container(
       child: Column(
         children: [
@@ -39,91 +42,61 @@ class _ProfileInfosState extends State<ProfileInfos> {
               urlToPP,
               scale: 4,
             ),
-            radius: MediaQuery.of(context).size.width * (0.2),
+            radius: MediaQuery.of(context).size.width * (0.1),
           ),
           SizedBox(
             height: 10,
           ),
           Text(
-            name,
+            "$name",
             style: TextStyle(
-                color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+              color: Theme.of(context).accentColor,
+              fontSize: 17,
+              fontFamily: 'Nunito',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Text(
+            "$infos",
+            style: TextStyle(
+              color: Colors.grey[500].withOpacity(0.5),
+              fontSize: 10,
+            ),
           ),
         ],
       ),
     ));
   }
 
-  Widget _chartCredit(
-      BuildContext context, Key chartKey, Size chartSize, int nbr) {
-    Color completedColor;
-
-    return (AnimatedCircularChart(
-      key: chartKey,
-      size: chartSize,
-      initialChartData: <CircularStackEntry>[
-        new CircularStackEntry(
-          <CircularSegmentEntry>[
-            new CircularSegmentEntry(
-              ((60 - nbr) * 100) / 60,
-              Colors.blueGrey[600],
-              rankKey: 'remaining',
-            ),
-            new CircularSegmentEntry(
-              (nbr * 100) / 60,
-              completedColor = nbr <= 20
-                  ? Colors.red
-                  : (nbr > 20 && nbr <= 40 ? Colors.orange : Colors.green),
-              rankKey: 'completing',
-            ),
-          ],
-          rankKey: 'progress',
+  Widget _infosCard(String infos, String label) {
+    return (Expanded(
+        child: Container(
+      padding: EdgeInsets.all(10),
+      child: Column(children: [
+        Text(
+          "$infos",
+          style: TextStyle(
+            fontFamily: "Rubik",
+            color: Theme.of(context).accentColor,
+          ),
         ),
-      ],
-      chartType: CircularChartType.Radial,
-      percentageValues: false,
-      holeLabel: "$nbr/60",
-      labelStyle: new TextStyle(
-        color: Colors.blueGrey[600],
-        fontWeight: FontWeight.bold,
-        fontSize: 25.0,
-      ),
-    ));
-  }
-
-  Widget _chartGPA(
-      BuildContext context, Key chartKey, Size chartSize, double gpa) {
-    Color completedColor;
-
-    return (AnimatedCircularChart(
-      key: chartKey,
-      size: chartSize,
-      initialChartData: <CircularStackEntry>[
-        new CircularStackEntry(
-          <CircularSegmentEntry>[
-            new CircularSegmentEntry(
-              ((4 - gpa) * 100) / 4,
-              Colors.blueGrey[600],
-              rankKey: 'remaining',
-            ),
-            new CircularSegmentEntry(
-              (4 * 100) / 4,
-              completedColor = Colors.blue,
-              rankKey: 'completing',
-            ),
-          ],
-          rankKey: 'progress',
+        Text("$label"),
+        SizedBox(
+          height: 10,
         ),
-      ],
-      chartType: CircularChartType.Radial,
-      percentageValues: false,
-      holeLabel: "$gpa",
-      labelStyle: new TextStyle(
-        color: Colors.blueGrey[600],
-        fontWeight: FontWeight.bold,
-        fontSize: 25.0,
-      ),
-    ));
+      ]),
+      decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 10,
+              spreadRadius: 0.01,
+              color: Colors.grey[200],
+            )
+          ]),
+    )));
   }
 
   @override
@@ -131,14 +104,20 @@ class _ProfileInfosState extends State<ProfileInfos> {
     Size size = Size(MediaQuery.of(context).size.width * (0.4),
         MediaQuery.of(context).size.width * (0.4));
     TextStyle labelStyle = TextStyle(
+      color: Theme.of(context).accentColor,
+      fontSize: 15,
+      fontFamily: 'Nunito',
+      fontStyle: FontStyle.italic,
+      fontWeight: FontWeight.w600,
+    );
+    TextStyle valueStyle = TextStyle(
+      color: Colors.black,
       fontSize: 15,
       fontStyle: FontStyle.italic,
       fontWeight: FontWeight.w600,
     );
-    Key _chartCreditKey, _chartGPAKey;
-    _initInfos();
-
     return (Scaffold(
+        key: _key,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: CustomAppBar(
@@ -158,50 +137,129 @@ class _ProfileInfosState extends State<ProfileInfos> {
                 child: Text(
                   "Infos et reglages",
                   style: TextStyle(
-                      fontSize: 21,
-                      color: Theme.of(context).accentColor,
-                      fontFamily: 'Nunito'),
+                    fontSize: 21,
+                    color: Theme.of(context).accentColor,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               )
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            vertical: 20,
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+              padding: EdgeInsets.all(8),
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * (0.35),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 10,
+                          spreadRadius: 0.01,
+                          color: Colors.grey[350],
+                        )
+                      ]),
+                  child: Center(
+                    child: FutureBuilder(
+                      future: (autologin != null && epitechMail != null)
+                          ? intra.getInfos(autologin, epitechMail)
+                          : null,
+                      builder: (context, snapshot) {
+                        if (snapshot.data == null) {
+                          return (CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        } else {
+                          return (Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: MediaQuery.of(context).size.height *
+                                    (0.01)),
+                            child: Container(
+                              child: Column(children: [
+                                Expanded(
+                                  child: SizedBox(),
+                                ),
+                                _profileWidget(
+                                    'https://randomuser.me/api/portraits/women/70.jpg',
+                                    "${snapshot.data.name}",
+                                    "$epitechMail"),
+                                Expanded(
+                                  child: SizedBox(),
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    _infosCard("${snapshot.data.credits}/60",
+                                        "Crédits"),
+                                    SizedBox(
+                                      width: 7,
+                                    ),
+                                    _infosCard("${snapshot.data.gpa}", "GPA"),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    _infosCard("${snapshot.data.studentyear}e",
+                                        "Année"),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    _infosCard(
+                                        "${snapshot.data.cycle}", "Cycle"),
+                                    SizedBox(
+                                      width: 7,
+                                    ),
+                                  ],
+                                ),
+                                Expanded(
+                                  child: SizedBox(),
+                                ),
+                              ]),
+                            ),
+                          ));
+                        }
+                      },
+                    ),
+                  ))),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * (0.02),
           ),
-          child: Center(
-            child: Column(
-              children: [
-                _profileWidget('https://randomuser.me/api/portraits/men/17.jpg',
-                    "Charmeel (Tek$annee)"),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(children: [
-                              _chartCredit(
-                                  context, _chartCreditKey, size, credit),
-                              Text("Crédits", style: labelStyle)
-                            ]),
-                          ),
-                          Expanded(
-                            child: Column(children: [
-                              _chartGPA(context, _chartGPAKey, size, gpa),
-                              Text(
-                                "GPA",
-                                style: labelStyle,
-                              )
-                            ]),
-                          )
-                        ],
-                      ),
-                    ])),
-              ],
+          SingleChildScrollView(
+              child: Align(
+                  child: Wrap(direction: Axis.vertical, spacing: 15, children: [
+            CustomOptionButton(
+                label: "my.epitech.eu",
+                ico: Icons.public,
+                func: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => WebViewLoad(
+                          url: "https://my.epitech.eu/",
+                          title: "my.epitech.eu",
+                        )))),
+            CustomOptionButton(
+              label: "Notes par modules",
+              ico: Icons.notes,
             ),
-          ),
-        )));
+            CustomOptionButton(
+              label: "Projets actuels",
+              ico: Icons.work,
+            ),
+            CustomOptionButton(
+              label: "Partenaires",
+              ico: Icons.people,
+            ),
+            CustomOptionButton(
+              label: "Déconnexion",
+              ico: Icons.logout,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ])))
+        ])));
   }
 }
