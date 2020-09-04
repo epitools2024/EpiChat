@@ -1,19 +1,8 @@
-import 'package:EpiChat/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:EpiChat/widget/custom_icon_icons.dart';
-import 'package:EpiChat/chat/chat_core.dart';
-import 'package:EpiChat/planning/planning_core.dart';
-import 'package:EpiChat/marvin/marvin_core.dart';
-import 'package:EpiChat/news/news_core.dart';
-import 'package:EpiChat/marvin/chatbot_state.dart';
-import 'package:EpiChat/other_view/splash_screen.dart';
-import 'package:EpiChat/widget/custom_widget.dart';
-import 'package:EpiChat/profile/profile_infos.dart';
-import 'package:EpiChat/other_view/epitech_or_not_screen.dart';
-import 'package:EpiChat/other_view/login_screen.dart';
+import 'package.dart';
 
 void main() {
   runApp(MyApp());
