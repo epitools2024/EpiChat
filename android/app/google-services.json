@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "746085211115",
+    "firebase_url": "https://epichat-5b815.firebaseio.com",
+    "project_id": "epichat-5b815",
+    "storage_bucket": "epichat-5b815.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746085211115:android:f1e573349326afc170d7ae",
+        "android_client_info": {
+          "package_name": "com.example.EpiChat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746085211115-k9imj7sili6j2r0tkuk7qguvu7otmtpv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4N8AUP_VxW9SQ1PPISDjv0H513_oO4nc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746085211115-k9imj7sili6j2r0tkuk7qguvu7otmtpv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

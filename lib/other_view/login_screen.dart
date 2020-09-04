@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart' as URLLauncher;
 import 'package:EpiChat/lib.dart' as lib;
 import 'package:http/http.dart' as http;
@@ -144,6 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: TextStyle(
                                     fontSize: 15,
                                   ),
+                                  keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     filled: true,
                                     icon: Icon(Icons.mail,

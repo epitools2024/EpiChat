@@ -42,7 +42,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
               urlToPP,
               scale: 4,
             ),
-            radius: MediaQuery.of(context).size.width * (0.1),
+            radius: MediaQuery.of(context).size.width * (0.15),
           ),
           SizedBox(
             height: 10,
@@ -143,7 +143,18 @@ class _ProfileInfosState extends State<ProfileInfos> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              )
+              ),
+              Expanded(
+                child: SizedBox(),
+              ),
+              IconButton(
+                icon: Icon(Icons.logout, color: Theme.of(context).accentColor),
+                onPressed: () async {
+                  await lib.setBoolValue('isEpitech', false);
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('questions', (route) => false);
+                },
+              ),
             ],
           ),
         ),
@@ -184,38 +195,43 @@ class _ProfileInfosState extends State<ProfileInfos> {
                                   child: SizedBox(),
                                 ),
                                 _profileWidget(
-                                    'https://randomuser.me/api/portraits/women/70.jpg',
+                                    'https://randomuser.me/api/portraits/men/4.jpg',
                                     "${snapshot.data.name}",
                                     "$epitechMail"),
                                 Expanded(
                                   child: SizedBox(),
                                 ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    _infosCard("${snapshot.data.credits}/60",
-                                        "Crédits"),
-                                    SizedBox(
-                                      width: 7,
-                                    ),
-                                    _infosCard("${snapshot.data.gpa}", "GPA"),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    _infosCard("${snapshot.data.studentyear}e",
-                                        "Année"),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    _infosCard(
-                                        "${snapshot.data.cycle}", "Cycle"),
-                                    SizedBox(
-                                      width: 7,
-                                    ),
-                                  ],
-                                ),
+                                !snapshot.data.isAdmin
+                                    ? Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          _infosCard(
+                                              "${snapshot.data.credits}/60",
+                                              "Crédits"),
+                                          SizedBox(
+                                            width: 7,
+                                          ),
+                                          _infosCard(
+                                              "${snapshot.data.gpa}", "GPA"),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          _infosCard(
+                                              "${snapshot.data.studentyear}e",
+                                              "Année"),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          _infosCard("${snapshot.data.cycle}",
+                                              "Cycle"),
+                                          SizedBox(
+                                            width: 7,
+                                          ),
+                                        ],
+                                      )
+                                    : SizedBox(),
                                 Expanded(
                                   child: SizedBox(),
                                 ),
@@ -231,7 +247,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
           ),
           SingleChildScrollView(
               child: Align(
-                  child: Wrap(direction: Axis.vertical, spacing: 15, children: [
+                  child: Wrap(direction: Axis.vertical, spacing: 1, children: [
             CustomOptionButton(
                 label: "my.epitech.eu",
                 ico: Icons.public,
@@ -253,8 +269,8 @@ class _ProfileInfosState extends State<ProfileInfos> {
               ico: Icons.people,
             ),
             CustomOptionButton(
-              label: "Déconnexion",
-              ico: Icons.logout,
+              label: "Infos",
+              ico: LineIcons.info_circle,
             ),
             SizedBox(
               height: 10,

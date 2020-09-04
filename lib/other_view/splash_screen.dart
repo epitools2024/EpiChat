@@ -29,7 +29,7 @@ class SplashScreenState extends State<SplashScreen>
   }
 
   void navigationPage() {
-    if (isEpitech == true && mail != null && autologin != null)
+    if (isEpitech == true)
       Navigator.pushReplacementNamed(context, 'home');
     else
       Navigator.of(context).pushNamedAndRemoveUntil(
