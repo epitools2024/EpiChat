@@ -16,14 +16,18 @@ class _ProfileInfosState extends State<ProfileInfos> {
   int credit;
   String epitechMail, autologin;
   GlobalKey _key;
+  bool _isLoading = false;
+  String username;
 
   void _initUserInfos() async {
     var login = await lib.getStringFromSharedPref('autologin');
     var mail = await lib.getStringFromSharedPref('email');
+    var usrname = await lib.getStringFromSharedPref('username');
     print('Debug initUserInfos() (in profile_infos.dart):\n$mail\n$login');
     setState(() {
       epitechMail = mail;
       autologin = login;
+      username = usrname;
     });
   }
 
@@ -45,7 +49,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
             radius: MediaQuery.of(context).size.width * (0.15),
           ),
           SizedBox(
-            height: 10,
+            height: 6,
           ),
           Text(
             "$name",
@@ -59,9 +63,12 @@ class _ProfileInfosState extends State<ProfileInfos> {
           Text(
             "$infos",
             style: TextStyle(
-              color: Colors.grey[500].withOpacity(0.5),
-              fontSize: 10,
+              color: Colors.grey[500].withOpacity(0.6),
+              fontSize: 12,
             ),
+          ),
+          SizedBox(
+            height: 5,
           ),
         ],
       ),
@@ -150,6 +157,9 @@ class _ProfileInfosState extends State<ProfileInfos> {
               IconButton(
                 icon: Icon(Icons.logout, color: Theme.of(context).accentColor),
                 onPressed: () async {
+                  setState(() {
+                    _isLoading = true;
+                  });
                   await lib.setBoolValue('isEpitech', false);
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil('questions', (route) => false);
@@ -158,124 +168,135 @@ class _ProfileInfosState extends State<ProfileInfos> {
             ],
           ),
         ),
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-              padding: EdgeInsets.all(8),
-              child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * (0.35),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10,
-                          spreadRadius: 0.01,
-                          color: Colors.grey[350],
-                        )
-                      ]),
-                  child: Center(
-                    child: FutureBuilder(
-                      future: (autologin != null && epitechMail != null)
-                          ? intra.getInfos(autologin, epitechMail)
-                          : null,
-                      builder: (context, snapshot) {
-                        if (snapshot.data == null) {
-                          return (CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        } else {
-                          return (Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: MediaQuery.of(context).size.height *
-                                    (0.01)),
-                            child: Container(
-                              child: Column(children: [
-                                Expanded(
-                                  child: SizedBox(),
-                                ),
-                                _profileWidget(
-                                    'https://randomuser.me/api/portraits/men/4.jpg',
-                                    "${snapshot.data.name}",
-                                    "$epitechMail"),
-                                Expanded(
-                                  child: SizedBox(),
-                                ),
-                                !snapshot.data.isAdmin
-                                    ? Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          _infosCard(
-                                              "${snapshot.data.credits}/60",
-                                              "Crédits"),
-                                          SizedBox(
-                                            width: 7,
-                                          ),
-                                          _infosCard(
-                                              "${snapshot.data.gpa}", "GPA"),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          _infosCard(
-                                              "${snapshot.data.studentyear}e",
-                                              "Année"),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          _infosCard("${snapshot.data.cycle}",
-                                              "Cycle"),
-                                          SizedBox(
-                                            width: 7,
-                                          ),
-                                        ],
-                                      )
-                                    : SizedBox(),
-                                Expanded(
-                                  child: SizedBox(),
-                                ),
-                              ]),
-                            ),
-                          ));
-                        }
-                      },
-                    ),
-                  ))),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * (0.02),
-          ),
-          SingleChildScrollView(
-              child: Align(
-                  child: Wrap(direction: Axis.vertical, spacing: 1, children: [
-            CustomOptionButton(
-                label: "my.epitech.eu",
-                ico: Icons.public,
-                func: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => WebViewLoad(
-                          url: "https://my.epitech.eu/",
-                          title: "my.epitech.eu",
-                        )))),
-            CustomOptionButton(
-              label: "Notes par modules",
-              ico: Icons.notes,
-            ),
-            CustomOptionButton(
-              label: "Projets actuels",
-              ico: Icons.work,
-            ),
-            CustomOptionButton(
-              label: "Partenaires",
-              ico: Icons.people,
-            ),
-            CustomOptionButton(
-              label: "Infos",
-              ico: LineIcons.info_circle,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-          ])))
-        ])));
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * (0.4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 10,
+                                spreadRadius: 0.01,
+                                color: Colors.grey[350],
+                              )
+                            ]),
+                        child: Center(
+                          child: FutureBuilder(
+                            future: (autologin != null && epitechMail != null)
+                                ? intra.getInfos(autologin, epitechMail)
+                                : null,
+                            builder: (context, snapshot) {
+                              if (snapshot.data == null) {
+                                return (CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Text("${snapshot.error}");
+                              } else {
+                                int goalValue =
+                                    int.parse(snapshot.data.studentyear) * 60;
+                                return (Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical:
+                                          MediaQuery.of(context).size.height *
+                                              (0.01)),
+                                  child: Container(
+                                    child: Column(children: [
+                                      Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                      _profileWidget(
+                                          'https://randomuser.me/api/portraits/men/4.jpg',
+                                          "$username",
+                                          "$epitechMail"),
+                                      Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                      !snapshot.data.isAdmin
+                                          ? Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                _infosCard(
+                                                    "${snapshot.data.credits}/$goalValue",
+                                                    "Crédits"),
+                                                SizedBox(
+                                                  width: 7,
+                                                ),
+                                                _infosCard(
+                                                    "${snapshot.data.gpa}",
+                                                    "GPA"),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                _infosCard(
+                                                    "${snapshot.data.studentyear}e",
+                                                    "Année"),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                _infosCard(
+                                                    "${snapshot.data.cycle}",
+                                                    "Cycle"),
+                                                SizedBox(
+                                                  width: 7,
+                                                ),
+                                              ],
+                                            )
+                                          : SizedBox(),
+                                      Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                    ]),
+                                  ),
+                                ));
+                              }
+                            },
+                          ),
+                        ))),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * (0.02),
+                ),
+                SingleChildScrollView(
+                    child: Align(
+                        child: Wrap(
+                            direction: Axis.vertical,
+                            spacing: 1,
+                            children: [
+                      CustomOptionButton(
+                          label: "my.epitech.eu",
+                          ico: Icons.public,
+                          func: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => WebViewLoad(
+                                        url: "https://my.epitech.eu/",
+                                        title: "my.epitech.eu",
+                                      )))),
+                      CustomOptionButton(
+                        label: "Notes par modules",
+                        ico: Icons.notes,
+                      ),
+                      CustomOptionButton(
+                        label: "Projets actuels",
+                        ico: Icons.work,
+                      ),
+                      CustomOptionButton(
+                        label: "Partenaires",
+                        ico: Icons.people,
+                      ),
+                      CustomOptionButton(
+                        label: "Infos",
+                        ico: LineIcons.info_circle,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ])))
+              ])));
   }
 }

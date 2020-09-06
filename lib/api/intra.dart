@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:EpiChat/modal/user.dart';
 import 'dart:convert';
 
 class EndPoint {
@@ -8,58 +9,6 @@ class EndPoint {
   static String notes = '/notes?format=json';
   static String missed = '/notification/missed?format=json';
   static String nextRdv = '/notification/coming?format=json';
-}
-
-enum endPoint {
-  all,
-  alert,
-  message,
-  notes,
-  missed,
-  nextRdv,
-}
-
-extension endPointExt on endPoint {
-  static const names = {
-    endPoint.all: '/?format=json',
-    endPoint.alert: '/notification/alert?format=json',
-    endPoint.message: '/notification/message?format=json',
-    endPoint.notes: '/notes?format=json',
-    endPoint.missed: '/notification/missed?format=json',
-    endPoint.nextRdv: '/notification/coming?format=json',
-  };
-
-  String get value => names[this];
-}
-
-class EpitechUser {
-  final String credits;
-  final String gpa;
-  final String year;
-  final String name;
-  final String cycle;
-  final String studentyear;
-  final bool isAdmin;
-  EpitechUser(
-      {this.name,
-      this.credits,
-      this.gpa,
-      this.year,
-      this.cycle,
-      this.studentyear,
-      this.isAdmin});
-
-  factory EpitechUser.fromJson(Map<String, dynamic> json) {
-    return (EpitechUser(
-      name: json['title'].toString(),
-      credits: json['credits'].toString(),
-      gpa: json['gpa'][0]['gpa'].toString(),
-      year: json['scolaryear'].toString(),
-      cycle: json['gpa'][0]['cycle'].toString(),
-      studentyear: json['studentyear'].toString(),
-      isAdmin: json['admin'],
-    ));
-  }
 }
 
 Future<EpitechUser> getInfos(String login, String mail) async {

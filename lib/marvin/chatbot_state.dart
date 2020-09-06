@@ -65,7 +65,7 @@ class ChatBot extends StatefulWidget {
 class _ChatBotState extends State<ChatBot> {
   final TextEditingController _controller = TextEditingController();
   List<Widget> messageList = [
-    Sms('bot', "Je te suis 👽"),
+    Sms('bot', "Je te suis à vos préoccupations sur Epitech 👽!"),
   ];
 
   Future<void> agentResponse(query) async {

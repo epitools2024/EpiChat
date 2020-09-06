@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewLoad extends StatefulWidget {
@@ -17,6 +17,14 @@ class WebViewLoadUI extends State<WebViewLoad> {
             preferredSize: Size.fromHeight(kToolbarHeight),
             child: CustomAppBar(
               compenants: [
+                IconButton(
+                  icon: Icon(
+                    LineIcons.chevron_circle_left,
+                    color: Theme.of(context).accentColor,
+                    size: 30,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(context),
+                ),
                 Expanded(
                   child: SizedBox(),
                 ),
