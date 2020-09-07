@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         accentColor: Color(0xFF4573F8),
       ),
-      home: ChatBot(),
+      home: SplashScreen(),
       routes: {
         'home': (context) => MyHomePage(
               isEpitech: true,
@@ -162,9 +162,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ? Padding(
               padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(

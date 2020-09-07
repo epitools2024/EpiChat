@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:EpiChat/modal/user.dart';
+import 'package:EpiChat/services/user.dart';
 import 'dart:convert';
 
 class EndPoint {

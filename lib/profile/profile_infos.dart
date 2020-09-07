@@ -3,6 +3,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:EpiChat/widget/custom_widget.dart';
 import 'package:EpiChat/lib.dart' as lib;
 import 'package:EpiChat/api/intra.dart' as intra;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileInfos extends StatefulWidget {
   ProfileInfos({Key key}) : super(key: key);
@@ -18,16 +19,26 @@ class _ProfileInfosState extends State<ProfileInfos> {
   GlobalKey _key;
   bool _isLoading = false;
   String username;
+  QuerySnapshot nameSnapshot;
 
   void _initUserInfos() async {
     var login = await lib.getStringFromSharedPref('autologin');
     var mail = await lib.getStringFromSharedPref('email');
     var usrname = await lib.getStringFromSharedPref('username');
     print('Debug initUserInfos() (in profile_infos.dart):\n$mail\n$login');
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: "${mail.toString()}")
+        .get()
+        .then((value) {
+      setState(() {
+        nameSnapshot = value;
+      });
+    });
     setState(() {
       epitechMail = mail;
       autologin = login;
-      username = usrname;
     });
   }
 
@@ -192,7 +203,8 @@ class _ProfileInfosState extends State<ProfileInfos> {
                                 ? intra.getInfos(autologin, epitechMail)
                                 : null,
                             builder: (context, snapshot) {
-                              if (snapshot.data == null) {
+                              if (snapshot.data == null ||
+                                  nameSnapshot == null) {
                                 return (CircularProgressIndicator());
                               } else if (snapshot.hasError) {
                                 return Text("${snapshot.error}");
@@ -211,7 +223,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
                                       ),
                                       _profileWidget(
                                           'https://randomuser.me/api/portraits/men/4.jpg',
-                                          "$username",
+                                          "${nameSnapshot.docs[0].data()["username"]}",
                                           "$epitechMail"),
                                       Expanded(
                                         child: SizedBox(),

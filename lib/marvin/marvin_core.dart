@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:EpiChat/marvin/chatbot_state.dart';
+import 'package:EpiChat/marvin/chatbot_view.dart';
 
 class MarvinJr extends StatefulWidget {
   MarvinJr({Key key, this.isEpitech}) : super(key: key);

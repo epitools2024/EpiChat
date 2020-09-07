@@ -1,11 +1,13 @@
+import 'package:EpiChat/services/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart' as URLLauncher;
 import 'package:EpiChat/lib.dart' as lib;
 import 'package:http/http.dart' as http;
-import 'package:EpiChat/services/auth.dart';
 import 'package:EpiChat/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,6 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _signIn = true;
   bool _autoValidate = false;
   bool _isLoading = false;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  UserCredential result;
+  User user;
+  DatabaseMethods data;
 
   @override
   void initState() {
@@ -76,9 +82,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final form = _globalForm.currentState;
     http.Response response = await http
         .get(Uri.encodeFull('${_autologin.text}/user/${_email.text}/'));
-    FirebaseAuth auth = FirebaseAuth.instance;
-    UserCredential result;
-    User user;
 
     if (!form.validate() || response.statusCode != 200) {
       _autoValidate = true;
@@ -107,13 +110,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final form = _globalForm.currentState;
     http.Response response = await http
         .get(Uri.encodeFull('${_autologin.text}/user/${_email.text}/'));
-    FirebaseAuth auth = FirebaseAuth.instance;
-    UserCredential result;
-    User user;
-    Map<String, dynamic> userInfos = {
-      'username': _name.toString(),
-      'email': _email.toString(),
-    };
 
     if (!form.validate() || response.statusCode != 200) {
       _autoValidate = true;
@@ -131,7 +127,18 @@ class _LoginScreenState extends State<LoginScreen> {
       } on FirebaseAuthException catch (e) {
         print("${e.code}");
       }
-
+      Map<String, dynamic> userInfos = {
+        'username': _name.text,
+        'email': _email.text,
+        'bio': "Je suis ${_name.text}."
+      };
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc()
+          .set(userInfos)
+          .catchError((e) {
+        print("$e");
+      });
       await lib.setStringValue('username', _name.text);
       await lib.setStringValue('email', _email.text);
       await lib.setStringValue('autologin', _autologin.text);
@@ -143,6 +150,16 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget signIn(BuildContext context, double containerHeight) {
     return (Column(
       children: [
+        SizedBox(
+          height: containerHeight * (0.2),
+        ),
+        Image.asset(
+          'assets/png/EPITECH.png',
+          scale: MediaQuery.of(context).size.width * (0.012),
+        ),
+        SizedBox(
+          height: containerHeight * (0.08),
+        ),
         Material(
           child: TextFormField(
             controller: _email,
@@ -234,6 +251,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget signUp(BuildContext context, double containerHeight) {
     return (Column(children: [
+      SizedBox(
+        height: containerHeight * (0.14),
+      ),
+      Image.asset(
+        'assets/png/EPITECH.png',
+        scale: MediaQuery.of(context).size.width * (0.012),
+      ),
+      SizedBox(
+        height: containerHeight * (0.08),
+      ),
       Material(
         child: TextFormField(
           controller: _name,
@@ -250,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       SizedBox(
-        height: containerHeight * (0.02),
+        height: containerHeight * (0.025),
       ),
       Material(
         child: TextFormField(
@@ -269,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       SizedBox(
-        height: containerHeight * (0.02),
+        height: containerHeight * (0.025),
       ),
       Material(
           child: TextFormField(
@@ -304,7 +331,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       SizedBox(
-        height: containerHeight * (0.03),
+        height: containerHeight * (0.04),
       ),
       RaisedButton(
         onPressed: () {
@@ -384,16 +411,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ]),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: containerHeight * (0.2),
-                        ),
-                        Image.asset(
-                          'assets/png/EPITECH.png',
-                          scale: MediaQuery.of(context).size.width * (0.012),
-                        ),
-                        SizedBox(
-                          height: containerHeight * (0.08),
-                        ),
                         Container(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Form(

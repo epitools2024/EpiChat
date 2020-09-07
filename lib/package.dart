@@ -7,7 +7,7 @@ export 'planning/planning_core.dart';
 
 export 'news/news_core.dart';
 
-export 'marvin/chatbot_state.dart';
+export 'marvin/chatbot_view.dart';
 export 'marvin/marvin_core.dart';
 
 export 'profile/profile_infos.dart';

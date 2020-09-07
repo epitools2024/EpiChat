@@ -102,13 +102,20 @@ class CustomAppBar extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.white, boxShadow: [
-        BoxShadow(
-          color: Colors.grey[500],
-          spreadRadius: 1,
-          blurRadius: 1,
-        )
-      ]),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey[500],
+            spreadRadius: 1,
+            blurRadius: 1,
+          )
+        ],
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
+      ),
       child: SafeArea(
         child: Row(
           children: this.compenants,

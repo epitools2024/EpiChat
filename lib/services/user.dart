@@ -33,12 +33,15 @@ class EpitechUser {
 }
 
 class MyUser {
-  final String usrId;
   final String userName;
   final String email;
   final String bio;
 
-  MyUser({this.userName, this.email, this.bio, this.usrId});
+  MyUser({
+    this.userName,
+    this.email,
+    this.bio,
+  });
 
   toJson() {
     Map<String, dynamic> json = {

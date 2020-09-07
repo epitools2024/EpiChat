@@ -126,6 +126,7 @@ class _ChatBotState extends State<ChatBot> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     child: TextField(
+                      keyboardType: TextInputType.text,
                       controller: _controller,
                       decoration:
                           InputDecoration.collapsed(hintText: "Ecrivez ici !"),
