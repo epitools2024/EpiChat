@@ -7,10 +7,8 @@ class AuthMethods {
   Future signInWithMailAndAutologin(
       String epitechMail, String autologin) async {
     try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
           email: epitechMail, password: autologin);
-      User user = result.user;
-      await lib.setStringValue('firebase_uid', "${user.uid}");
     } catch (e) {
       print(e.toString());
     }
@@ -19,11 +17,9 @@ class AuthMethods {
   Future signUpWithMailAndAutologin(
       String epitechMail, String autologin) async {
     try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
+      await _auth.createUserWithEmailAndPassword(
           email: epitechMail, password: autologin);
-      User user = result.user;
-      await lib.setStringValue('firebase_uid', "${user.uid}");
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       print(e.toString());
     }
   }

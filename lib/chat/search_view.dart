@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:EpiChat/widget/custom_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:EpiChat/services/database.dart';
+import 'package:EpiChat/lib.dart' as lib;
+import 'package:EpiChat/chat/conversation.dart';
 
 class SearchTile extends StatelessWidget {
   final String username;
   final String usermail;
+  final String chatId;
 
-  SearchTile({this.username, this.usermail});
+  SearchTile({this.username, this.usermail, this.chatId});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,25 @@ class SearchTile extends StatelessWidget {
         ),
         trailing: FlatButton(
           color: Theme.of(context).accentColor,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(PageRouteBuilder(
+                pageBuilder: (context, animation, secondanimation) {
+                  return ConversationScreen(
+                    chatId: chatId == null ? "Error" : chatId,
+                    correspondentName: this.username,
+                  );
+                },
+                transitionDuration: Duration(milliseconds: 300),
+                transitionsBuilder:
+                    (context, animation, anotherAnimation, child) {
+                  return (SlideTransition(
+                    position:
+                        Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                            .animate(animation),
+                    child: child,
+                  ));
+                }));
+          },
           child: Text(
             "Ecrire",
             style: TextStyle(
@@ -54,33 +76,56 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
   TextEditingController searchController = new TextEditingController();
   QuerySnapshot searchSnapshot;
+  DatabaseMethods database = new DatabaseMethods();
+  var username;
+
+  getChatRoomId(String myMail, String correspondentMail) {
+    if (myMail.substring(0, 1).codeUnitAt(0) >
+        correspondentMail.substring(0, 1).codeUnitAt(0)) {
+      return "$correspondentMail\_$myMail";
+    } else {
+      return "$myMail\_$correspondentMail";
+    }
+  }
+
+  createAndStartConversation(String correspondentMail) {
+    if (correspondentMail != username) {
+      String chatId = getChatRoomId(username, correspondentMail);
+      List<String> users = [username, correspondentMail];
+      Map<String, dynamic> chatRoomMap = {
+        'users': users,
+        'chatroomId': chatId,
+      };
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _initSearch();
+    _getUserLocalInfos();
+  }
+
+  _getUserLocalInfos() async {
+    var tmp_username = await lib.getStringFromSharedPref('username');
+
+    setState(() {
+      username = tmp_username;
+    });
   }
 
   _initSearch() {
     bool data = searchController.text.contains("@");
 
     if (data) {
-      FirebaseFirestore.instance
-          .collection("users")
-          .where("email", isEqualTo: "${searchController.text}")
-          .get()
-          .then((value) {
+      database.getUserByEmail("${searchController.text}").then((value) {
         setState(() {
           print("${value.docs.length}");
           searchSnapshot = value;
         });
       });
     } else {
-      FirebaseFirestore.instance
-          .collection("users")
-          .where("username", isEqualTo: "${searchController.text}")
-          .get()
-          .then((value) {
+      database.getUserByUsername("${searchController.text}").then((value) {
         setState(() {
           print("${value.docs.length}");
           searchSnapshot = value;

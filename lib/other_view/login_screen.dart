@@ -1,4 +1,4 @@
-import 'package:EpiChat/services/user.dart';
+import 'package:EpiChat/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
@@ -7,7 +7,6 @@ import 'package:EpiChat/lib.dart' as lib;
 import 'package:http/http.dart' as http;
 import 'package:EpiChat/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,11 +25,11 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _signIn = true;
   bool _autoValidate = false;
   bool _isLoading = false;
-  FirebaseAuth auth = FirebaseAuth.instance;
+  AuthMethods auth = new AuthMethods();
   UserCredential result;
   User user;
-  DatabaseMethods data;
-
+  DatabaseMethods data = new DatabaseMethods();
+  QuerySnapshot snapshot;
   @override
   void initState() {
     super.initState();
@@ -82,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final form = _globalForm.currentState;
     http.Response response = await http
         .get(Uri.encodeFull('${_autologin.text}/user/${_email.text}/'));
+    var username;
 
     if (!form.validate() || response.statusCode != 200) {
       _autoValidate = true;
@@ -91,14 +91,14 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = true;
       });
-      try {
-        result = await auth.signInWithEmailAndPassword(
-            email: _email.text, password: _autologin.text);
-        user = result.user;
-        await lib.setStringValue('firebase_uid', "${user.uid}");
-      } on FirebaseAuthException catch (e) {
-        print("${e.code}");
-      }
+
+      data.getUserByEmail(_email.text).then((value) {
+        setState(() {
+          snapshot = value;
+        });
+      });
+      await auth.signInWithMailAndAutologin(_email.text, _autologin.text);
+      await lib.setStringValue('username', snapshot.docs[0].data()['username']);
       await lib.setStringValue('email', _email.text);
       await lib.setStringValue('autologin', _autologin.text);
       await lib.setBoolValue('isEpitech', true);
@@ -119,27 +119,20 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = true;
       });
-      try {
-        result = await auth.createUserWithEmailAndPassword(
-            email: _email.text, password: _autologin.text);
-        user = result.user;
-        await lib.setStringValue('firebase_uid', "${user.uid}");
-      } on FirebaseAuthException catch (e) {
-        print("${e.code}");
-      }
+      await auth.signUpWithMailAndAutologin(_email.text, _autologin.text);
       Map<String, dynamic> userInfos = {
         'username': _name.text,
         'email': _email.text,
         'bio': "Je suis ${_name.text}."
       };
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc()
-          .set(userInfos)
-          .catchError((e) {
-        print("$e");
+
+      data.uploadUser(userInfos);
+      data.getUserByEmail(_email.text).then((value) {
+        setState(() {
+          snapshot = value;
+        });
       });
-      await lib.setStringValue('username', _name.text);
+      await lib.setStringValue('username', snapshot.docs[0].data()['username']);
       await lib.setStringValue('email', _email.text);
       await lib.setStringValue('autologin', _autologin.text);
       await lib.setBoolValue('isEpitech', true);
