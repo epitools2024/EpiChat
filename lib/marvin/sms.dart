@@ -10,19 +10,21 @@ class Sms extends StatelessWidget {
 
   Widget userSms(BuildContext context) {
     return (Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-      Card(
-          margin: EdgeInsets.all(5),
+      Container(
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
           color: Theme.of(context).accentColor,
-          child: Padding(
-            padding: EdgeInsets.all(8),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * (0.5),
-              ),
-              child: Text(this.message,
-                  style: TextStyle(color: Colors.white, fontSize: _fontSize)),
-            ),
-          )),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          this.message,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: _fontSize,
+          ),
+        ),
+      )
     ]));
   }
 
@@ -37,21 +39,21 @@ class Sms extends StatelessWidget {
         SizedBox(
           width: 8,
         ),
-        Card(
-            margin: EdgeInsets.all(5),
-            color: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * (0.5),
-                ),
-                child: Text(
-                  this.message,
-                  style: TextStyle(color: Colors.black, fontSize: _fontSize),
-                ),
-              ),
-            )),
+        Container(
+          margin: EdgeInsets.all(5),
+          padding: EdgeInsets.all(8),
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * (0.5),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            this.message,
+            style: TextStyle(color: Colors.black, fontSize: _fontSize),
+          ),
+        ),
       ]),
     ]));
   }

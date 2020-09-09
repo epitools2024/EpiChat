@@ -30,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   User user;
   DatabaseMethods data = new DatabaseMethods();
   QuerySnapshot snapshot;
+
   @override
   void initState() {
     super.initState();
@@ -81,7 +82,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final form = _globalForm.currentState;
     http.Response response = await http
         .get(Uri.encodeFull('${_autologin.text}/user/${_email.text}/'));
-    var username;
 
     if (!form.validate() || response.statusCode != 200) {
       _autoValidate = true;
@@ -90,44 +90,9 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       setState(() {
         _isLoading = true;
-      });
-
-      data.getUserByEmail(_email.text).then((value) {
-        setState(() {
-          snapshot = value;
-        });
       });
       await auth.signInWithMailAndAutologin(_email.text, _autologin.text);
-      await lib.setStringValue('username', snapshot.docs[0].data()['username']);
-      await lib.setStringValue('email', _email.text);
-      await lib.setStringValue('autologin', _autologin.text);
-      await lib.setBoolValue('isEpitech', true);
-      Navigator.of(context).popAndPushNamed("home");
-    }
-  }
-
-  void _submitSignUpForm(BuildContext context) async {
-    final form = _globalForm.currentState;
-    http.Response response = await http
-        .get(Uri.encodeFull('${_autologin.text}/user/${_email.text}/'));
-
-    if (!form.validate() || response.statusCode != 200) {
-      _autoValidate = true;
-      lib.showDialog(context, _scaffoldKey,
-          "Il semble que soit votre email ou votre autologin ne soit pas valide soit que vous l'avez mal écrit !\nPensez à revoir votre connexion aussi !");
-    } else {
-      setState(() {
-        _isLoading = true;
-      });
-      await auth.signUpWithMailAndAutologin(_email.text, _autologin.text);
-      Map<String, dynamic> userInfos = {
-        'username': _name.text,
-        'email': _email.text,
-        'bio': "Je suis ${_name.text}."
-      };
-
-      data.uploadUser(userInfos);
-      data.getUserByEmail(_email.text).then((value) {
+      await data.getUserByEmail(_email.text).then((value) {
         setState(() {
           snapshot = value;
         });
@@ -242,6 +207,40 @@ class _LoginScreenState extends State<LoginScreen> {
     ));
   }
 
+  void _submitSignUpForm(BuildContext context) async {
+    final form = _globalForm.currentState;
+    http.Response response = await http
+        .get(Uri.encodeFull('${_autologin.text}/user/${_email.text}/'));
+
+    if (!form.validate() || response.statusCode != 200) {
+      _autoValidate = true;
+      lib.showDialog(context, _scaffoldKey,
+          "Il semble que soit votre email ou votre autologin ne soit pas valide soit que vous l'avez mal écrit !\nPensez à revoir votre connexion aussi !");
+    } else {
+      setState(() {
+        _isLoading = true;
+      });
+      await auth.signUpWithMailAndAutologin(_email.text, _autologin.text);
+      Map<String, dynamic> userInfos = {
+        'username': _name.text.toLowerCase(),
+        'email': _email.text,
+        'bio': "Je suis ${_name.text}."
+      };
+
+      await data.uploadUser(userInfos);
+      await data.getUserByEmail(_email.text).then((value) {
+        setState(() {
+          snapshot = value;
+        });
+      });
+      await lib.setStringValue('username', snapshot.docs[0].data()['username']);
+      await lib.setStringValue('email', _email.text);
+      await lib.setStringValue('autologin', _autologin.text);
+      await lib.setBoolValue('isEpitech', true);
+      Navigator.of(context).popAndPushNamed("home");
+    }
+  }
+
   Widget signUp(BuildContext context, double containerHeight) {
     return (Column(children: [
       SizedBox(
@@ -261,6 +260,10 @@ class _LoginScreenState extends State<LoginScreen> {
             fontSize: 15,
           ),
           keyboardType: TextInputType.emailAddress,
+          validator: (e) {
+            if (e.isEmpty) return ("Définissez un nom d'utilisateur !");
+            return (null);
+          },
           decoration: InputDecoration(
             filled: true,
             icon: Icon(LineIcons.user, color: Theme.of(context).accentColor),

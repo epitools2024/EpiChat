@@ -23,15 +23,45 @@ class DatabaseMethods {
         .catchError((e) {
       print("$e");
     });
+  }
 
-    createChatRoom(String chatId, Map<String, dynamic> firstMessage) async {
-      await FirebaseFirestore.instance
-          .collection('charRooms')
-          .doc(chatId)
-          .set(firstMessage)
-          .catchError((e) {
-        print("$e");
-      });
-    }
+  createChatRoom(String chatroomId, Map<String, dynamic> chatRoomData) async {
+    await FirebaseFirestore.instance
+        .collection('chatRooms')
+        .doc(chatroomId)
+        .set(chatRoomData)
+        .catchError((e) {
+      print("$e");
+    });
+  }
+
+  addConversationMessage(
+      String chatroomId, Map<String, dynamic> message) async {
+    return await FirebaseFirestore.instance
+        .collection('chatRooms')
+        .doc(chatroomId)
+        .collection("chats")
+        .add(message)
+        .catchError((e) {
+      print("${e.toString()}");
+    });
+  }
+
+  getConversationMessages(String chatroomId) async {
+    return FirebaseFirestore.instance
+        .collection('chatRooms')
+        .doc(chatroomId)
+        .collection("chats")
+        .orderBy('time')
+        .snapshots()
+        .asBroadcastStream();
+  }
+
+  getChatRooms(String usermail) {
+    return FirebaseFirestore.instance
+        .collection('chatRooms')
+        .where('users', arrayContains: usermail)
+        .snapshots()
+        .asBroadcastStream();
   }
 }

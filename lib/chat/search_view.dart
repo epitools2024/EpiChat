@@ -9,9 +9,36 @@ import 'package:EpiChat/chat/conversation.dart';
 class SearchTile extends StatelessWidget {
   final String username;
   final String usermail;
-  final String chatId;
+  final String correspondentname;
+  final String correspondentmail;
 
-  SearchTile({this.username, this.usermail, this.chatId});
+  SearchTile({
+    this.correspondentname,
+    this.correspondentmail,
+    this.username,
+    this.usermail,
+  });
+
+  createAndStartConversation(String correspondentMail) {
+    if (this.correspondentmail != this.username) {
+      String chatId = getChatRoomId(this.usermail, this.correspondentmail);
+      List<String> users = [this.usermail, this.correspondentmail];
+      Map<String, dynamic> chatRoomData = {
+        'users': users,
+        'chatroomId': chatId,
+      };
+      DatabaseMethods().createChatRoom(chatId, chatRoomData);
+    }
+  }
+
+  getChatRoomId(String usermail, String correspondentmail) {
+    if (this.usermail.substring(0, 1).codeUnitAt(0) >
+        this.correspondentmail.substring(0, 1).codeUnitAt(0)) {
+      return "${this.correspondentmail}\_${this.usermail}";
+    } else {
+      return "${this.usermail}\_${this.correspondentmail}";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,25 +47,31 @@ class SearchTile extends StatelessWidget {
         dense: true,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         title: Text(
-          this.username == null ? "null" : this.username,
+          this.correspondentname == null ? "null" : this.correspondentname,
           style: TextStyle(
             fontSize: 15,
           ),
         ),
         subtitle: Text(
-          this.usermail == null ? "null" : this.usermail,
+          this.correspondentmail == null ? "null" : this.correspondentmail,
         ),
         trailing: FlatButton(
           color: Theme.of(context).accentColor,
           onPressed: () {
+            String chatId =
+                getChatRoomId(this.usermail, this.correspondentmail);
+
+            createAndStartConversation(this.correspondentmail);
             Navigator.of(context).push(PageRouteBuilder(
                 pageBuilder: (context, animation, secondanimation) {
                   return ConversationScreen(
                     chatId: chatId == null ? "Error" : chatId,
-                    correspondentName: this.username,
+                    correspondentmail: this.correspondentmail,
+                    usermail: this.usermail,
+                    correspondentname: this.correspondentname,
                   );
                 },
-                transitionDuration: Duration(milliseconds: 300),
+                transitionDuration: Duration(milliseconds: 200),
                 transitionsBuilder:
                     (context, animation, anotherAnimation, child) {
                   return (SlideTransition(
@@ -50,7 +83,7 @@ class SearchTile extends StatelessWidget {
                 }));
           },
           child: Text(
-            "Ecrire",
+            "Ecrirez",
             style: TextStyle(
               color: Colors.white,
               fontSize: 15,
@@ -77,27 +110,8 @@ class _SearchViewState extends State<SearchView> {
   TextEditingController searchController = new TextEditingController();
   QuerySnapshot searchSnapshot;
   DatabaseMethods database = new DatabaseMethods();
+  var usermail;
   var username;
-
-  getChatRoomId(String myMail, String correspondentMail) {
-    if (myMail.substring(0, 1).codeUnitAt(0) >
-        correspondentMail.substring(0, 1).codeUnitAt(0)) {
-      return "$correspondentMail\_$myMail";
-    } else {
-      return "$myMail\_$correspondentMail";
-    }
-  }
-
-  createAndStartConversation(String correspondentMail) {
-    if (correspondentMail != username) {
-      String chatId = getChatRoomId(username, correspondentMail);
-      List<String> users = [username, correspondentMail];
-      Map<String, dynamic> chatRoomMap = {
-        'users': users,
-        'chatroomId': chatId,
-      };
-    }
-  }
 
   @override
   void initState() {
@@ -107,10 +121,12 @@ class _SearchViewState extends State<SearchView> {
   }
 
   _getUserLocalInfos() async {
-    var tmp_username = await lib.getStringFromSharedPref('username');
+    var tmp = await lib.getStringFromSharedPref('email');
+    var tmp2 = await lib.getStringFromSharedPref('username');
 
     setState(() {
-      username = tmp_username;
+      usermail = tmp;
+      username = tmp2;
     });
   }
 
@@ -141,8 +157,11 @@ class _SearchViewState extends State<SearchView> {
             itemCount: searchSnapshot.docs.length,
             itemBuilder: (context, index) {
               return SearchTile(
-                username: searchSnapshot.docs[index].data()["username"],
-                usermail: searchSnapshot.docs[index].data()["email"],
+                correspondentname:
+                    searchSnapshot.docs[index].data()["username"],
+                correspondentmail: searchSnapshot.docs[index].data()["email"],
+                usermail: usermail,
+                username: username,
               );
             },
           )
