@@ -21,12 +21,12 @@ class WebViewLoadUI extends State<WebViewLoad> {
                   icon: Icon(
                     LineIcons.chevron_circle_left,
                     color: Theme.of(context).accentColor,
-                    size: 30,
+                    size: MediaQuery.of(context).size.height * (0.05),
                   ),
                   onPressed: () => Navigator.of(context).pop(context),
                 ),
-                Expanded(
-                  child: SizedBox(),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * (0.2),
                 ),
                 Center(
                   child: Text(
@@ -37,9 +37,6 @@ class WebViewLoadUI extends State<WebViewLoad> {
                       color: Theme.of(context).accentColor,
                     ),
                   ),
-                ),
-                Expanded(
-                  child: SizedBox(),
                 ),
               ],
             )),
@@ -101,8 +98,14 @@ class CustomAppBar extends StatelessWidget {
   final List<Widget> compenants;
 
   Widget build(BuildContext context) {
+    double borderRadius = 10;
+
     return Container(
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(borderRadius),
+          bottomRight: Radius.circular(borderRadius),
+        ),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
@@ -111,10 +114,6 @@ class CustomAppBar extends StatelessWidget {
             blurRadius: 1,
           )
         ],
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-        ),
       ),
       child: SafeArea(
         child: Row(
@@ -133,7 +132,9 @@ class CustomOptionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (GestureDetector(
+    return (InkWell(
+        borderRadius: BorderRadius.circular(8),
+        splashColor: Theme.of(context).accentColor,
         onTap: func,
         child: Padding(
             padding: EdgeInsets.all(3),
@@ -148,13 +149,17 @@ class CustomOptionButton extends StatelessWidget {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * (0.03),
                     ),
-                    Icon(this.ico),
+                    Icon(
+                      this.ico,
+                      size: MediaQuery.of(context).size.width * (0.08),
+                    ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * (0.05),
                     ),
                     Text(this.label,
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize:
+                              MediaQuery.of(context).size.height * (0.025),
                           color: Theme.of(context).accentColor,
                         ))
                   ])),

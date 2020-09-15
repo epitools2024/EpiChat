@@ -50,7 +50,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
               urlToPP,
               scale: 4,
             ),
-            radius: MediaQuery.of(context).size.width * (0.15),
+            radius: MediaQuery.of(context).size.width * (0.156),
           ),
           SizedBox(
             height: 6,
@@ -59,7 +59,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
             "$name",
             style: TextStyle(
               color: Theme.of(context).accentColor,
-              fontSize: 17,
+              fontSize: MediaQuery.of(context).size.height * (0.03),
               fontFamily: 'Nunito',
               fontWeight: FontWeight.w600,
             ),
@@ -68,7 +68,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
             "$infos",
             style: TextStyle(
               color: Colors.grey[500].withOpacity(0.6),
-              fontSize: 12,
+              fontSize: MediaQuery.of(context).size.height * (0.02),
             ),
           ),
           SizedBox(
@@ -89,9 +89,15 @@ class _ProfileInfosState extends State<ProfileInfos> {
           style: TextStyle(
             fontFamily: "Rubik",
             color: Theme.of(context).accentColor,
+            fontSize: MediaQuery.of(context).size.height * (0.02),
           ),
         ),
-        Text("$label"),
+        Text(
+          "$label",
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.height * (0.02),
+          ),
+        ),
         SizedBox(
           height: 10,
         ),
@@ -127,6 +133,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
       fontStyle: FontStyle.italic,
       fontWeight: FontWeight.w600,
     );
+
     return (Scaffold(
         key: _key,
         appBar: PreferredSize(
@@ -164,10 +171,24 @@ class _ProfileInfosState extends State<ProfileInfos> {
                   setState(() {
                     _isLoading = true;
                   });
-                  await auth.signOut();
+                  /*await auth.signOut();
                   await lib.setBoolValue('isEpitech', false);
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('questions', (route) => false);
+                      .pushNamedAndRemoveUntil('questions', (route) => false);*/
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Alert Dialog"),
+                          content: Text("Dialog Content"),
+                          actions: [
+                            FlatButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Wrap(),
+                            ),
+                          ],
+                        );
+                      });
                 },
               ),
             ],
@@ -283,16 +304,21 @@ class _ProfileInfosState extends State<ProfileInfos> {
                                         title: "my.epitech.eu",
                                       )))),
                       CustomOptionButton(
+                          label: "Roslyn Timeline",
+                          ico: LineIcons.paper_plane,
+                          func: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => WebViewLoad(
+                                        url: "https://roslyn.epi.codes/",
+                                        title: "Timeline",
+                                      )))),
+                      CustomOptionButton(
                         label: "Notes par modules",
                         ico: Icons.notes,
                       ),
                       CustomOptionButton(
                         label: "Projets actuels",
                         ico: Icons.work,
-                      ),
-                      CustomOptionButton(
-                        label: "Partenaires",
-                        ico: Icons.people,
                       ),
                       CustomOptionButton(
                         label: "Infos",
