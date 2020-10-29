@@ -133,16 +133,18 @@ class _ChatState extends State<Chat> {
   var usermail;
 
   _getUsermail() async {
-    var tmp = await lib.getStringFromSharedPref('email');
-    await data.getChatRooms(tmp).then((value) {
-      chatRoomsStream = value;
+    var mail = await lib.getStringFromSharedPref('email');
+    await data.getChatRooms(mail).then((value) {
+      setState(() {
+        chatRoomsStream = value;
+      });
     });
   }
 
   @override
   void initState() {
-    super.initState();
     _getUsermail();
+    super.initState();
   }
 
   Widget chatRoomsList() {
@@ -152,17 +154,18 @@ class _ChatState extends State<Chat> {
         return (snapshot.hasData
             ? ListView.builder(
                 shrinkWrap: true,
-                itemCount: snapshot.data.docs.lenght,
+                itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
-                  return (ChatRoomsTile(
-                    name: snapshot.data.docs[index].data()["users"][1],
-                    lastMessage: "Mon argent bro ?",
-                    nbrUnreadMessage: 0,
-                    lastMessageHour: "11:20",
+                  return (Container(
+                    child: Text(
+                      snapshot.data.docs[index].data()["users"][0],
+                    ),
                   ));
                 },
               )
-            : CircularProgressIndicator());
+            : Align(
+                child: CircularProgressIndicator(),
+              ));
       },
     );
   }
@@ -179,78 +182,10 @@ class _ChatState extends State<Chat> {
                   .push(MaterialPageRoute(builder: (context) => SearchView()));
             }),
         body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Wrap(
-              direction: Axis.vertical,
-              spacing: 5,
-              children: [
-                SizedBox(
-                  height: 5,
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/men/17.jpg',
-                  name: "Jean Claude",
-                  lastMessage: "Mon argent bro ?",
-                  nbrUnreadMessage: 0,
-                  lastMessageHour: "11:20",
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/men/18.jpg',
-                  name: "Baba Tiguè",
-                  lastMessage: "Je cherche ta soeur.. Impoli !",
-                  nbrUnreadMessage: 100,
-                  lastMessageHour: "11:20",
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/men/19.jpg',
-                  name: "Fofo Mano",
-                  lastMessage: "Arrête la weeb. C'est pas bien.",
-                  nbrUnreadMessage: 2,
-                  lastMessageHour: "11:20",
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/men/20.jpg',
-                  name: "Boss",
-                  lastMessage: fullMessage,
-                  nbrUnreadMessage: 1,
-                  lastMessageHour: "14:01",
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/women/17.jpg',
-                  name: "Andrea",
-                  lastMessage: "Sodabi combien ?",
-                  nbrUnreadMessage: 5,
-                  lastMessageHour: "12:20",
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/women/1.jpg',
-                  name: "Kpocle",
-                  lastMessage: "Miss U Bae...",
-                  nbrUnreadMessage: 5,
-                  lastMessageHour: "04:10",
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/men/50.jpg',
-                  name: "Brizzy",
-                  lastMessage: "Je suis vraiment énerver contre toi",
-                  nbrUnreadMessage: 5,
-                  lastMessageHour: "20:50",
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/women/28.jpg',
-                  name: "Tanti Claudia",
-                  lastMessage: "Bébé tu es où ?",
-                  nbrUnreadMessage: 5,
-                  lastMessageHour: "8:37",
-                ),
-                ChatRoomsTile(
-                  photoURL: 'https://randomuser.me/api/portraits/men/65.jpg',
-                  name: "Jean Claude",
-                  lastMessage: "COCHON !",
-                  nbrUnreadMessage: 1,
-                  lastMessageHour: "19:16",
-                ),
-              ],
-            ))));
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Center(
+            child: chatRoomsList(),
+          ),
+        )));
   }
 }

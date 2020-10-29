@@ -83,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
     http.Response response = await http
         .get(Uri.encodeFull('${_autologin.text}/user/${_email.text}/'));
 
+    print("AUTOLOGIN: ${_autologin.text} \n USERMAIL: ${_email.text}");
     if (!form.validate() || response.statusCode != 200) {
       _autoValidate = true;
       lib.showDialog(context, _scaffoldKey,

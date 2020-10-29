@@ -171,11 +171,11 @@ class _ProfileInfosState extends State<ProfileInfos> {
                   setState(() {
                     _isLoading = true;
                   });
-                  /*await auth.signOut();
+                  await auth.signOut();
                   await lib.setBoolValue('isEpitech', false);
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('questions', (route) => false);*/
-                  showDialog(
+                      .pushNamedAndRemoveUntil('questions', (route) => false);
+                  /*showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
@@ -184,11 +184,11 @@ class _ProfileInfosState extends State<ProfileInfos> {
                           actions: [
                             FlatButton(
                               onPressed: () => Navigator.of(context).pop(),
-                              child: Wrap(),
+                              child: Text("Sortir"),
                             ),
                           ],
                         );
-                      });
+                      });*/
                 },
               ),
             ],

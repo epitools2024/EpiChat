@@ -57,8 +57,8 @@ class DatabaseMethods {
         .asBroadcastStream();
   }
 
-  getChatRooms(String usermail) {
-    return FirebaseFirestore.instance
+  getChatRooms(String usermail) async {
+    return await FirebaseFirestore.instance
         .collection('chatRooms')
         .where('users', arrayContains: usermail)
         .snapshots()

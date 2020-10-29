@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:EpiChat/other_view/onboardme/onboardme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,9 @@ class MyApp extends StatelessWidget {
         'questions': (context) => Questions(),
         'login': (context) => LoginScreen(),
         'splashscreen': (context) => SplashScreen(),
+        'onboard': (context) => OnboardingMe(
+              homeRoute: "login",
+            )
       },
     );
   }
@@ -121,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     alignment: Alignment.centerLeft,
                     child: Image.asset(
                       "assets/png/epichat-name.png",
-                      scale: MediaQuery.of(context).size.height * (0.006),
+                      scale: MediaQuery.of(context).size.height * (0.005),
                     ),
                   )),
               Expanded(

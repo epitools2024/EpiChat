@@ -21,7 +21,7 @@ class WebViewLoadUI extends State<WebViewLoad> {
                   icon: Icon(
                     LineIcons.chevron_circle_left,
                     color: Theme.of(context).accentColor,
-                    size: MediaQuery.of(context).size.height * (0.05),
+                    size: MediaQuery.of(context).size.height * (0.04),
                   ),
                   onPressed: () => Navigator.of(context).pop(context),
                 ),

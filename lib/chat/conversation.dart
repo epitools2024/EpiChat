@@ -115,35 +115,37 @@ class ConversationScreenState extends State<ConversationScreen> {
           child: Column(
         children: [
           messageList(),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: Card(
-              margin: EdgeInsets.all(10),
-              color: Colors.grey[100],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(40)),
-              ),
-              child: Row(
-                children: [
-                  Flexible(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: TextField(
-                        textCapitalization: TextCapitalization.sentences,
-                        controller: _messageController,
-                        decoration: InputDecoration.collapsed(
-                            hintText: "Ecrivez ici !"),
+          Align(
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              child: Card(
+                margin: EdgeInsets.all(10),
+                color: Colors.grey[100],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                ),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: TextField(
+                          textCapitalization: TextCapitalization.sentences,
+                          controller: _messageController,
+                          decoration: InputDecoration.collapsed(
+                              hintText: "Ecrivez ici !"),
+                        ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon:
-                        Icon(Icons.send, color: Theme.of(context).accentColor),
-                    onPressed: () {
-                      sendMessage();
-                    },
-                  )
-                ],
+                    IconButton(
+                      icon: Icon(Icons.send,
+                          color: Theme.of(context).accentColor),
+                      onPressed: () {
+                        sendMessage();
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
           )
