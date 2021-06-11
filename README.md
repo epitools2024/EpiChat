@@ -6,7 +6,7 @@ This is a simple social media mobile app available on Androind and iOS made for 
 ## Goals 📌
 
 - This project has the main goal of providing a social media made for Epitech Student. It should provide a summary of all the intranet's data in order to get the student in touch with their year's progression.
-- This project is also about to release the first dart package to handle correctly with a good OOP design in order to provide a full interface to handle easily the intranet's API. At this point, we will also write good and robust documentation both for the API endpoint and the package's core functionalities.
+- This project is also about to release the first dart package to handle correctly with a good OOP design in order to provide a full interface to handle easily the intranet's API. At this point, we will also write good and robust documentation both for the API's endpoints and the package's core functionalities.
 - EpiChat has the will to make the students closer to each other and express themselves as geek people.
 
 ## Technical Requirement 🛠️
