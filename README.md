@@ -1,6 +1,6 @@
 # EpiChat
 
-This is a simple social media mobile app available on Androind and iOS made for Epitech Student by Epitech Student. 
+This is a simple social media mobile app available on Android and iOS made for Epitech Student by Epitech Student. 
 
 
 ## Goals 📌
