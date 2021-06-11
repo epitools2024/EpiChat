@@ -20,9 +20,9 @@ This is a simple social media mobile app available on Androind and iOS made for 
 ## Functionalities ♟️
 
 - Core
-    - [ ]  Login into the app
-    - [ ]  Registration to the app
-    - [ ]  Load and display profile information about the student
+    - [x]  Login into the app
+    - [x]  Registration to the app
+    - [x]  Load and display profile information about the student
     - [ ]  Implement the chat part
     - [ ]  Implement the planning feed
     - [ ]  Being able to run survey which will be shared to every student
@@ -33,8 +33,7 @@ This is a simple social media mobile app available on Androind and iOS made for 
     - [ ]  Stories system and management
     - [ ]  Custom feed for student
     - [ ]  Push notifications to make students in touch with their oncoming event on the intranet
-    - [ ]  
 
-This project is a part of the Epitools project which is a whole bunch of project to make a better place both for current students, future student and the Alumni.
+>:bulb: This project is a part of the Epitools project which is a whole bunch of project to make a better place both for current students, future student and the Alumni.
 
 ![https://github.com/NemesisX1/EpiChat/blob/master/assets/png/epitools.jpeg?raw=true](https://github.com/NemesisX1/EpiChat/blob/master/assets/png/epitools.jpeg?raw=true)
