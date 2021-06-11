@@ -27,7 +27,7 @@ This is a simple social media mobile app available on Androind and iOS made for 
     - [ ]  Being able to run survey which will be shared to every student
     - [ ]  Manage admin members side
     - [ ]  Manage students side
-    - [x]  Manage non epitech side trough a chatbot (look at this [repository](https://github.com/NemesisX1/FlutterChatBot))
+    - [x]  Manage non Epitech side trough a chatbot (look at this [repository](https://github.com/NemesisX1/FlutterChatBot))
 - Bonus
     - [ ]  Stories system and management
     - [ ]  Custom feed for student
