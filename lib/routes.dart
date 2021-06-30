@@ -1,13 +1,18 @@
+import 'package:EpiChat/views/home_view.dart';
+import 'package:EpiChat/views/login_view.dart';
+import 'package:EpiChat/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'helpers/empty_view.dart';
-
-import 'views/home_view.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
+        return MaterialPageRoute(builder: (_) => SplashView());
+      case '/login':
+        return MaterialPageRoute(builder: (_) => LoginView());
+      case '/home':
         return MaterialPageRoute(builder: (_) => HomeView());
       default:
         return MaterialPageRoute(builder: (_) {
