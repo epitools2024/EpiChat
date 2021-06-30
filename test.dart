@@ -17,7 +17,7 @@ extension endPointExt on endPoint {
     endPoint.nextRdv: '/notification/coming?format=json',
   };
 
-  String get value => names[this];
+  String get value => names[this]!;
 }
 
 main(List<String> args) {
