@@ -49,5 +49,3 @@ class AuthService {
     }
   }
 }
-
-var auth = new AuthService();

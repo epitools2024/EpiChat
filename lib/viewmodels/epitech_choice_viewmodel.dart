@@ -1,3 +1,3 @@
 import 'package:EpiChat/viewmodels/base_viewmodel.dart';
 
-class SplashViewModel extends BaseViewModel {}
+class EpitechChoiceViewModel extends BaseViewModel {}
