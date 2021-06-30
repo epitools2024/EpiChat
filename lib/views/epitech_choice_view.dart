@@ -11,24 +11,24 @@ class EpitechChoiceView extends StatefulWidget {
 
 class _EpitechChoiceViewState extends State<EpitechChoiceView>
     with SingleTickerProviderStateMixin {
-  AnimationController? _controller;
-  Animation<Offset>? _offsetAnimation;
-  Animation<double>? _animation;
+  // AnimationController? _controller;
+  // Animation<Offset>? _offsetAnimation;
+  // Animation<double>? _animation = Animation<double>();
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    )..repeat(reverse: true);
-    _offsetAnimation = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(0, 0.5),
-    ).animate(CurvedAnimation(
-      parent: _animation!,
-      curve: Curves.elasticIn,
-    ));
+    // _controller = AnimationController(
+    //   duration: const Duration(seconds: 2),
+    //   vsync: this,
+    // )..repeat(reverse: true);
+    // _offsetAnimation = Tween<Offset>(
+    //   begin: Offset.zero,
+    //   end: const Offset(0, 0.5),
+    // ).animate(CurvedAnimation(
+    //   parent: _animation!,
+    //   curve: Curves.elasticIn,
+    // ));
   }
 
   @override
@@ -68,16 +68,13 @@ class _EpitechChoiceViewState extends State<EpitechChoiceView>
               padding: EdgeInsets.all(10),
               child: CustomCenteredColumn(
                 children: [
-                  SlideTransition(
-                    position: _offsetAnimation!,
-                    child: Text(
-                      "Bienvenue💓",
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                        fontSize: 25,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "Bienvenue💓",
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontSize: 25,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(

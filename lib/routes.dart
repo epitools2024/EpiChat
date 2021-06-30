@@ -18,9 +18,11 @@ class AppRouter {
       case '/home':
         return MaterialPageRoute(builder: (_) => HomeView());
       default:
-        return MaterialPageRoute(builder: (_) {
-          return EmptyView();
-        });
+        return MaterialPageRoute(
+          builder: (_) {
+            return EmptyView();
+          },
+        );
     }
   }
 }

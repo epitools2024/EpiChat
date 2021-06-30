@@ -15,7 +15,9 @@ class _HomeViewState extends State<HomeView> {
     return BaseView<HomeViewModel>(
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(),
-        body: ListBody(),
+        body: Column(
+          children: [],
+        ),
       ),
     );
   }

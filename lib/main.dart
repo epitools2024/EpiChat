@@ -1,4 +1,5 @@
 import 'package:EpiChat/helpers/constants.dart';
+import 'package:EpiChat/locator.dart';
 import 'package:EpiChat/models/appuser_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ void main() async {
 
 globalInitializer() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   await Firebase.initializeApp();
   await Hive.initFlutter();
 
@@ -29,7 +31,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'EpiChat',
+      debugShowCheckedModeBanner: false,
       theme: appTheme,
       onGenerateRoute: (settings) => AppRouter.generateRoute(
         settings,

@@ -14,36 +14,33 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView>
-    with SingleTickerProviderStateMixin {
+/*with SingleTickerProviderStateMixin*/ {
   LocalService _localService = locator<LocalService>();
   var _visible = true;
-  bool enableOnBoard = true;
   AnimationController? animationController;
   Animation<double>? animation;
   AppUser? _currentUser;
 
   void navigationPage() {
-    try {
-      setState(() {
-        _currentUser = _localService.readAppUser();
-      });
-      Navigator.pushReplacementNamed(context, '/home');
-    } catch (e) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
-    }
+    /*try {
+      _currentUser = _localService.readAppUser();
+      Navigator.pushReplacementNamed(context, '/home');*/
+//    } catch (e) {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/choice', (Route<dynamic> route) => false);
+    //  }
   }
 
   @override
   void initState() {
     super.initState();
-    animationController = new AnimationController(
+    /*animationController = new AnimationController(
         vsync: this, duration: new Duration(milliseconds: 2000));
     animation =
         new CurvedAnimation(parent: animation!, curve: Curves.bounceInOut);
 
     animationController!.addListener(() => this.setState(() {}));
-    animationController!.forward();
+    animationController!.forward();*/
     setState(() {
       _visible = !_visible;
     });
@@ -52,21 +49,6 @@ class _SplashViewState extends State<SplashView>
 
   startTime() async {
     var _duration = new Duration(milliseconds: 2300);
-    try {
-      _currentUser = _localService.readAppUser();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(
-            "Error: ${e.toString()}",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      );
-    }
     return new Timer(_duration, () => navigationPage());
   }
 
@@ -83,12 +65,8 @@ class _SplashViewState extends State<SplashView>
             child: Center(
               child: new Image.asset(
                 'assets/png/epichat-name.png',
-                width: animation!.value *
-                    MediaQuery.of(context).size.width *
-                    (_scalingFactor),
-                height: animation!.value *
-                    MediaQuery.of(context).size.width *
-                    (_scalingFactor),
+                width: MediaQuery.of(context).size.width * (_scalingFactor),
+                height: MediaQuery.of(context).size.width * (_scalingFactor),
               ),
             ),
           ),
