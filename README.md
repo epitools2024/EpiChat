@@ -35,4 +35,7 @@ This is a simple social media mobile app available on Android and iOS made for E
 
 >:bulb: This project is a part of the Epitools project which is a whole bunch of project to make a better place both for current students, future student and the Alumni.
 
+> ## :sunglasses:  Author(s)
+**Junior Medehou** [![Twitter Follow](https://img.shields.io/twitter/follow/juniormedehou_?label=Follow&style=social)](https://twitter.com/juniormedehou_)
+
 ![https://github.com/NemesisX1/EpiChat/blob/master/assets/png/epitools.jpeg?raw=true](https://github.com/NemesisX1/EpiChat/blob/master/assets/png/epitools.jpeg?raw=true)
